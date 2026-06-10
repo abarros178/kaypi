@@ -16,6 +16,7 @@
   "dependencies": {
     "@kaypi/shared": "*",
     "@libsql/client": "^0.17.0",
+    "bcryptjs": "^3.0.3",
     "drizzle-orm": "^0.45.0"
   },
   "devDependencies": {
