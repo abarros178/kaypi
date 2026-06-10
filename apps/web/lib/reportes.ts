@@ -138,3 +138,63 @@ export function rangoPorDefecto(hoyISO: string): { desde: string; hasta: string 
     .slice(0, 10);
   return { desde, hasta };
 }
+
+export type EstadoDia = 'TRABAJADO' | 'RETRASO' | 'FALTA' | 'EXTRA' | 'LIBRE';
+
+export interface FilaCalendario {
+  empleadoId: string;
+  nombre: string;
+  oficina: string;
+  dias: Record<string, EstadoDia>;
+}
+
+export interface Calendario {
+  dias: string[];
+  filas: FilaCalendario[];
+}
+
+/** Estado por día y empleado para la vista calendario (mismo criterio que resumenTA). */
+export function gridSemanal(
+  empleados: EmpleadoTA[],
+  eventos: EventoTA[],
+  rango: { desde: string; hasta: string },
+): Calendario {
+  const dias = diasDelRango(rango.desde, rango.hasta);
+
+  const filas: FilaCalendario[] = empleados.map((emp) => {
+    const esFija = emp.jornadaTipo === 'FIJA';
+    const entradaMin = emp.horaEntrada ? horaAMinutos(emp.horaEntrada) : null;
+
+    const porDia = new Map<string, Array<{ tipo: TipoMarcaje; ts: number; minutos: number }>>();
+    for (const e of eventos) {
+      if (e.empleadoId !== emp.id) continue;
+      const { fecha, minutos } = partesLocales(e.tsServidorUTC, emp.tz);
+      if (fecha < rango.desde || fecha > rango.hasta) continue;
+      const lista = porDia.get(fecha) ?? [];
+      lista.push({ tipo: e.tipo, ts: new Date(e.tsServidorUTC).getTime(), minutos });
+      porDia.set(fecha, lista);
+    }
+
+    const estados: Record<string, EstadoDia> = {};
+    for (const dia of dias) {
+      const marcajes = porDia.get(dia);
+      const ins = marcajes?.filter((m) => m.tipo === 'IN') ?? [];
+      if (ins.length === 0) {
+        estados[dia] = esLaborable(dia) && esFija ? 'FALTA' : 'LIBRE';
+        continue;
+      }
+      const hDia = minutosTrabajados(marcajes!.map((m) => ({ tipo: m.tipo, ts: m.ts }))) / 60;
+      let estado: EstadoDia = 'TRABAJADO';
+      if (esFija && entradaMin != null) {
+        const primerIn = Math.min(...ins.map((m) => m.minutos));
+        if (primerIn > entradaMin + emp.toleranciaRetrasoMin) estado = 'RETRASO';
+      }
+      if (estado === 'TRABAJADO' && hDia > emp.maxHorasDiarias) estado = 'EXTRA';
+      estados[dia] = estado;
+    }
+
+    return { empleadoId: emp.id, nombre: emp.nombre, oficina: emp.oficinaNombre, dias: estados };
+  });
+
+  return { dias, filas };
+}

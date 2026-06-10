@@ -5,6 +5,7 @@ import {
   auditLog,
   checkInEvent,
   codigoFallback,
+  compensacion,
   empleado,
   empresa,
   jornada,
@@ -142,6 +143,7 @@ async function main(): Promise<void> {
   await db.delete(kioscoQrReplay);
   await db.delete(kiosco);
   await db.delete(checkInEvent);
+  await db.delete(compensacion);
   await db.delete(empleado);
   await db.delete(politicaCheckIn);
   await db.delete(jornada);
@@ -239,6 +241,15 @@ async function main(): Promise<void> {
   await db.insert(kiosco).values([
     { id: 'kio_cdmx_01', oficinaId: 'ofi_cdmx', nombre: 'Recepción CDMX', status: 'active' },
     { id: 'kio_lima_01', oficinaId: 'ofi_lima', nombre: 'Recepción Lima', status: 'active' },
+  ]);
+
+  // Compensación demo (insumo de la pre-nómina): mezcla por hora / mensual y monedas.
+  await db.insert(compensacion).values([
+    { id: 'comp_andres', empleadoId: 'emp_andres', tipoSalario: 'MENSUAL', monto: 48000, moneda: 'MXN', periodoPago: 'QUINCENAL', multiplicadorExtra: 1.25, horasMesBase: 240 },
+    { id: 'comp_julian', empleadoId: 'emp_julian', tipoSalario: 'MENSUAL', monto: 32000, moneda: 'MXN', periodoPago: 'QUINCENAL', multiplicadorExtra: 1.25, horasMesBase: 240 },
+    { id: 'comp_felipe', empleadoId: 'emp_felipe', tipoSalario: 'POR_HORA', monto: 130, moneda: 'MXN', periodoPago: 'QUINCENAL', multiplicadorExtra: 1.5, horasMesBase: 240 },
+    { id: 'comp_lucia', empleadoId: 'emp_lucia', tipoSalario: 'POR_HORA', monto: 28, moneda: 'PEN', periodoPago: 'QUINCENAL', multiplicadorExtra: 1.25, horasMesBase: 240 },
+    { id: 'comp_marco', empleadoId: 'emp_marco', tipoSalario: 'MENSUAL', monto: 3200, moneda: 'PEN', periodoPago: 'MENSUAL', multiplicadorExtra: 1.35, horasMesBase: 240 },
   ]);
 
   const eventos: NuevoCheckInEvent[] = [
