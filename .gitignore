@@ -13,3 +13,4 @@ dist
 *.tsbuildinfo
 .claude/
 next-env.d.ts
+AGENTS.md
