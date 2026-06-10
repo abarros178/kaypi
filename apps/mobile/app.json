@@ -7,8 +7,17 @@
     "scheme": "kaypi",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "ios": { "supportsTablet": true },
-    "android": {},
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Kaypi usa la camara para capturar la foto del marcaje.",
+        "NSFaceIDUsageDescription": "Kaypi usa Face ID para confirmar la presencia al marcar asistencia.",
+        "NSLocationWhenInUseUsageDescription": "Kaypi usa tu ubicacion durante el marcaje para validar la oficina."
+      }
+    },
+    "android": {
+      "permissions": ["CAMERA", "ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
+    },
     "web": { "bundler": "metro" }
   }
 }

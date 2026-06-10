@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 import { hash } from 'bcryptjs';
 import { db } from './client';
 import {
@@ -9,10 +9,17 @@ import {
   empleado,
   empresa,
   jornada,
+  kiosco,
+  kioscoQrReplay,
   oficina,
   politicaCheckIn,
   type NuevoCheckInEvent,
 } from './schema';
+
+/** Genera un qrSecret HMAC (32 bytes random, base64). */
+function nuevoQrSecret(): string {
+  return randomBytes(32).toString('base64');
+}
 
 // Offsets fijos: CDMX no usa horario de verano desde 2022; Lima nunca lo usa.
 const OFF_CDMX = -6;
@@ -133,6 +140,8 @@ async function main(): Promise<void> {
   // Borrado en orden hijo→padre (idempotente: re-correr deja estado limpio).
   await db.delete(auditLog);
   await db.delete(codigoFallback);
+  await db.delete(kioscoQrReplay);
+  await db.delete(kiosco);
   await db.delete(checkInEvent);
   await db.delete(compensacion);
   await db.delete(empleado);
@@ -222,11 +231,16 @@ async function main(): Promise<void> {
   const DEMO_HASH = await hash('demo1234', 10);
 
   await db.insert(empleado).values([
-    { id: 'emp_andres', empresaId: 'empresa_kaypi', oficinaId: 'ofi_cdmx', jornadaId: 'jor_fija_cdmx', nombre: 'Andrés Barros', email: 'andres@kaypi.demo', passwordHash: DEMO_HASH, rol: 'ADMIN' },
-    { id: 'emp_julian', empresaId: 'empresa_kaypi', oficinaId: 'ofi_cdmx', jornadaId: 'jor_fija_cdmx', nombre: 'Julián Restrepo', email: 'julian@kaypi.demo', passwordHash: DEMO_HASH, rol: 'MANAGER' },
-    { id: 'emp_felipe', empresaId: 'empresa_kaypi', oficinaId: 'ofi_cdmx', jornadaId: 'jor_fija_cdmx', nombre: 'Felipe Gómez', email: 'felipe@kaypi.demo', passwordHash: DEMO_HASH, rol: 'EMPLEADO' },
-    { id: 'emp_lucia', empresaId: 'empresa_kaypi', oficinaId: 'ofi_lima', jornadaId: 'jor_flex_lima', nombre: 'Lucía Quispe', email: 'lucia@kaypi.demo', passwordHash: DEMO_HASH, rol: 'EMPLEADO' },
-    { id: 'emp_marco', empresaId: 'empresa_kaypi', oficinaId: 'ofi_lima', jornadaId: 'jor_flex_lima', nombre: 'Marco Salas', email: 'marco@kaypi.demo', passwordHash: DEMO_HASH, rol: 'EMPLEADO' },
+    { id: 'emp_andres', empresaId: 'empresa_kaypi', oficinaId: 'ofi_cdmx', jornadaId: 'jor_fija_cdmx', nombre: 'Andrés Barros', email: 'andres@kaypi.demo', passwordHash: DEMO_HASH, rol: 'ADMIN', qrSecret: nuevoQrSecret() },
+    { id: 'emp_julian', empresaId: 'empresa_kaypi', oficinaId: 'ofi_cdmx', jornadaId: 'jor_fija_cdmx', nombre: 'Julián Restrepo', email: 'julian@kaypi.demo', passwordHash: DEMO_HASH, rol: 'MANAGER', qrSecret: nuevoQrSecret() },
+    { id: 'emp_felipe', empresaId: 'empresa_kaypi', oficinaId: 'ofi_cdmx', jornadaId: 'jor_fija_cdmx', nombre: 'Felipe Gómez', email: 'felipe@kaypi.demo', passwordHash: DEMO_HASH, rol: 'EMPLEADO', qrSecret: nuevoQrSecret() },
+    { id: 'emp_lucia', empresaId: 'empresa_kaypi', oficinaId: 'ofi_lima', jornadaId: 'jor_flex_lima', nombre: 'Lucía Quispe', email: 'lucia@kaypi.demo', passwordHash: DEMO_HASH, rol: 'EMPLEADO', qrSecret: nuevoQrSecret() },
+    { id: 'emp_marco', empresaId: 'empresa_kaypi', oficinaId: 'ofi_lima', jornadaId: 'jor_flex_lima', nombre: 'Marco Salas', email: 'marco@kaypi.demo', passwordHash: DEMO_HASH, rol: 'EMPLEADO', qrSecret: nuevoQrSecret() },
+  ]);
+
+  await db.insert(kiosco).values([
+    { id: 'kio_cdmx_01', oficinaId: 'ofi_cdmx', nombre: 'Recepción CDMX', status: 'active' },
+    { id: 'kio_lima_01', oficinaId: 'ofi_lima', nombre: 'Recepción Lima', status: 'active' },
   ]);
 
   // Compensación demo (insumo de la pre-nómina): mezcla por hora / mensual y monedas.
@@ -277,7 +291,7 @@ async function main(): Promise<void> {
   });
 
   console.log(
-    `✓ Seed listo: 1 empresa · 2 oficinas · 2 jornadas · 2 políticas · 5 empleados · ${eventos.length} marcajes · 1 código fallback`,
+    `✓ Seed listo: 1 empresa · 2 oficinas · 2 jornadas · 2 políticas · 5 empleados · 2 kioscos · ${eventos.length} marcajes · 1 código fallback`,
   );
 }
 

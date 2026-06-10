@@ -1,6 +1,6 @@
 'use server';
 
-import { randomUUID } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
@@ -39,6 +39,8 @@ export async function crearEmpleado(_prev: FormState, formData: FormData): Promi
       oficinaId: d.oficinaId,
       jornadaId: d.jornadaId ?? null,
       passwordHash: await hashPassword(d.password),
+      // Secreto HMAC para el QR del kiosco (lo usa el flujo de Julián; cada empleado el suyo).
+      qrSecret: randomBytes(32).toString('base64'),
     });
   } catch {
     return { error: 'No se pudo crear (¿el email ya está registrado?)' };

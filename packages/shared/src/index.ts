@@ -4,3 +4,4 @@ export * from './checkin';
 export * from './geo';
 export * from './ta';
 export * from './client';
+export * from './kiosco-qr';

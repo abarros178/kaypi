@@ -41,6 +41,11 @@ export const CheckInInputSchema = z.object({
   /** Hora local del dispositivo (ISO con offset). Solo referencia; NO se usa para nómina. */
   clienteLocal: IsoDateTime,
   fuente: Fuente.default('NORMAL'),
+  /**
+   * String del QR escaneado del celular del empleado. Requerido cuando `canal === 'KIOSCO'`.
+   * No se propaga al CheckInEvent; lo consume el servidor para validar firma/replay.
+   */
+  qrEmpleadoScan: z.string().optional(),
 });
 export type CheckInInput = z.infer<typeof CheckInInputSchema>;
 
