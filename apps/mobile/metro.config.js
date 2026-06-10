@@ -15,4 +15,8 @@ config.resolver.nodeModulesPaths = [
   path.resolve(workspaceRoot, 'node_modules'),
 ];
 
-module.exports = withNativeWind(config, { input: './global.css' });
+module.exports = withNativeWind(config, {
+  input: path.resolve(projectRoot, 'global.css'),
+  configPath: path.resolve(projectRoot, 'tailwind.config.js'),
+  disableTypeScriptGeneration: true,
+});
