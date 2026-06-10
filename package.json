@@ -27,5 +27,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "optionalDependencies": {
+    "@libsql/linux-x64-gnu": "^0.5.29"
   }
 }
