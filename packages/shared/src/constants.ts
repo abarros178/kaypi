@@ -12,6 +12,15 @@ export const FLAGS = {
   FALTA_UBICACION: 'falta_ubicacion',
   FALTA_FACIAL: 'falta_facial',
   CONFLICTO_SYNC: 'conflicto_sync',
+  KIOSCO_QR_FALTANTE: 'kiosco_qr_faltante',
+  KIOSCO_QR_INVALIDO: 'kiosco_qr_invalido',
+  KIOSCO_QR_TIPO_MISMATCH: 'kiosco_qr_tipo_mismatch',
+  KIOSCO_QR_EMPLEADO_DESCONOCIDO: 'kiosco_qr_empleado_desconocido',
+  KIOSCO_QR_OFICINA_AJENA: 'kiosco_qr_oficina_ajena',
+  KIOSCO_QR_EXPIRADO: 'kiosco_qr_expirado',
+  KIOSCO_QR_FIRMA_INVALIDA: 'kiosco_qr_firma_invalida',
+  KIOSCO_QR_REPLAY: 'kiosco_qr_replay',
+  KIOSCO_NO_CONFIGURADO: 'kiosco_no_configurado',
 } as const;
 
 export type FlagConocido = (typeof FLAGS)[keyof typeof FLAGS];
