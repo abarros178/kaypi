@@ -10,3 +10,5 @@ dist
 *.db-wal
 .turbo
 .DS_Store
+*.tsbuildinfo
+.claude/

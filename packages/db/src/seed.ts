@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { hash } from 'bcryptjs';
 import { db } from './client';
 import {
   auditLog,
@@ -11,9 +12,6 @@ import {
   politicaCheckIn,
   type NuevoCheckInEvent,
 } from './schema';
-
-/** Hash dummy de "demo1234". Auth real es trabajo posterior (hoy no se valida). */
-const DEMO_HASH = '$2b$10$8K1p/aZ5qZ9Xv3qH0sO5e8c5fL2mN7oP1qR3sT4uV6wX8yZ0aB2C';
 
 // Offsets fijos: CDMX no usa horario de verano desde 2022; Lima nunca lo usa.
 const OFF_CDMX = -6;
@@ -217,6 +215,9 @@ async function main(): Promise<void> {
       fallbackHabilitado: true,
     },
   ]);
+
+  // Todos los empleados de demostración comparten la contraseña "demo1234".
+  const DEMO_HASH = await hash('demo1234', 10);
 
   await db.insert(empleado).values([
     { id: 'emp_andres', empresaId: 'empresa_kaypi', oficinaId: 'ofi_cdmx', jornadaId: 'jor_fija_cdmx', nombre: 'Andrés Barros', email: 'andres@kaypi.demo', passwordHash: DEMO_HASH, rol: 'ADMIN' },
