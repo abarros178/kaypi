@@ -62,6 +62,20 @@ export const empleado = sqliteTable('empleado', {
   fotoRefPerfil: text('foto_ref_perfil'),
 });
 
+/** Compensación del empleado (1:1) — insumo para la pre-nómina. */
+export const compensacion = sqliteTable('compensacion', {
+  id: text('id').primaryKey(),
+  empleadoId: text('empleado_id').notNull().unique().references(() => empleado.id),
+  tipoSalario: text('tipo_salario', { enum: ['POR_HORA', 'MENSUAL'] }).notNull(),
+  monto: real('monto').notNull(),
+  moneda: text('moneda').notNull().default('COP'),
+  periodoPago: text('periodo_pago', { enum: ['DIARIO', 'QUINCENAL', 'MENSUAL'] }).notNull().default('QUINCENAL'),
+  /** Multiplicador de la hora extra (ej. 1.25 = +25%). */
+  multiplicadorExtra: real('multiplicador_extra').notNull().default(1.25),
+  /** Horas/mes para derivar la tarifa por hora desde un salario mensual. */
+  horasMesBase: real('horas_mes_base').notNull().default(240),
+});
+
 export const checkInEvent = sqliteTable('checkin_event', {
   /** = eventId del cliente (uuid) → idempotencia al sincronizar colas offline. */
   id: text('id').primaryKey(),
@@ -87,6 +101,10 @@ export const checkInEvent = sqliteTable('checkin_event', {
     .default('NORMAL'),
   creadoPor: text('creado_por'),
   creadoEn: text('creado_en').notNull().$defaultFn(() => new Date().toISOString()),
+  /** Revisión/aprobación de marcajes con flag (gobernanza). */
+  revisado: integer('revisado', { mode: 'boolean' }).notNull().default(false),
+  revisadoPor: text('revisado_por'),
+  revisadoEn: text('revisado_en'),
 });
 
 export const codigoFallback = sqliteTable('codigo_fallback', {
@@ -135,6 +153,7 @@ export const empleadoRelations = relations(empleado, ({ one, many }) => ({
   oficina: one(oficina, { fields: [empleado.oficinaId], references: [oficina.id] }),
   jornada: one(jornada, { fields: [empleado.jornadaId], references: [jornada.id] }),
   eventos: many(checkInEvent),
+  compensacion: one(compensacion),
 }));
 
 export const checkInEventRelations = relations(checkInEvent, ({ one }) => ({
@@ -144,6 +163,10 @@ export const checkInEventRelations = relations(checkInEvent, ({ one }) => ({
 
 export const politicaCheckInRelations = relations(politicaCheckIn, ({ one }) => ({
   oficina: one(oficina, { fields: [politicaCheckIn.oficinaId], references: [oficina.id] }),
+}));
+
+export const compensacionRelations = relations(compensacion, ({ one }) => ({
+  empleado: one(empleado, { fields: [compensacion.empleadoId], references: [empleado.id] }),
 }));
 
 // --- Tipos inferidos (para usar en la API y los reportes) ---
@@ -157,3 +180,5 @@ export type CheckInEventRow = typeof checkInEvent.$inferSelect;
 export type NuevoCheckInEvent = typeof checkInEvent.$inferInsert;
 export type CodigoFallback = typeof codigoFallback.$inferSelect;
 export type AuditLogRow = typeof auditLog.$inferSelect;
+export type Compensacion = typeof compensacion.$inferSelect;
+export type NuevaCompensacion = typeof compensacion.$inferInsert;

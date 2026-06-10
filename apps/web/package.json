@@ -13,6 +13,7 @@
     "@kaypi/shared": "*",
     "@kaypi/ui": "*",
     "@libsql/client": "^0.17.0",
+    "@react-pdf/renderer": "^4.5.1",
     "bcryptjs": "^3.0.3",
     "drizzle-orm": "^0.45.0",
     "geist": "^1.7.0",

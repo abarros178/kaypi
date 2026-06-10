@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart3, Building2, CalendarClock, LayoutDashboard, ShieldCheck, Users } from 'lucide-react';
+import { Banknote, BarChart3, Building2, CalendarClock, ClipboardCheck, LayoutDashboard, ShieldCheck, Users } from 'lucide-react';
 import { cn } from '@kaypi/ui/cn';
 import { KaypiMark } from '@/app/_components/kaypi-mark';
 
@@ -13,6 +13,8 @@ const ITEMS = [
   { href: '/admin/politicas', label: 'Políticas', Icon: ShieldCheck },
   { href: '/admin/empleados', label: 'Empleados', Icon: Users },
   { href: '/admin/reportes', label: 'Reportes', Icon: BarChart3 },
+  { href: '/admin/nomina', label: 'Nómina', Icon: Banknote },
+  { href: '/admin/revisiones', label: 'Revisiones', Icon: ClipboardCheck },
 ];
 
 export function AdminNav() {

@@ -5,6 +5,7 @@ import {
   auditLog,
   checkInEvent,
   codigoFallback,
+  compensacion,
   empleado,
   empresa,
   jornada,
@@ -133,6 +134,7 @@ async function main(): Promise<void> {
   await db.delete(auditLog);
   await db.delete(codigoFallback);
   await db.delete(checkInEvent);
+  await db.delete(compensacion);
   await db.delete(empleado);
   await db.delete(politicaCheckIn);
   await db.delete(jornada);
@@ -225,6 +227,15 @@ async function main(): Promise<void> {
     { id: 'emp_felipe', empresaId: 'empresa_kaypi', oficinaId: 'ofi_cdmx', jornadaId: 'jor_fija_cdmx', nombre: 'Felipe Gómez', email: 'felipe@kaypi.demo', passwordHash: DEMO_HASH, rol: 'EMPLEADO' },
     { id: 'emp_lucia', empresaId: 'empresa_kaypi', oficinaId: 'ofi_lima', jornadaId: 'jor_flex_lima', nombre: 'Lucía Quispe', email: 'lucia@kaypi.demo', passwordHash: DEMO_HASH, rol: 'EMPLEADO' },
     { id: 'emp_marco', empresaId: 'empresa_kaypi', oficinaId: 'ofi_lima', jornadaId: 'jor_flex_lima', nombre: 'Marco Salas', email: 'marco@kaypi.demo', passwordHash: DEMO_HASH, rol: 'EMPLEADO' },
+  ]);
+
+  // Compensación demo (insumo de la pre-nómina): mezcla por hora / mensual y monedas.
+  await db.insert(compensacion).values([
+    { id: 'comp_andres', empleadoId: 'emp_andres', tipoSalario: 'MENSUAL', monto: 48000, moneda: 'MXN', periodoPago: 'QUINCENAL', multiplicadorExtra: 1.25, horasMesBase: 240 },
+    { id: 'comp_julian', empleadoId: 'emp_julian', tipoSalario: 'MENSUAL', monto: 32000, moneda: 'MXN', periodoPago: 'QUINCENAL', multiplicadorExtra: 1.25, horasMesBase: 240 },
+    { id: 'comp_felipe', empleadoId: 'emp_felipe', tipoSalario: 'POR_HORA', monto: 130, moneda: 'MXN', periodoPago: 'QUINCENAL', multiplicadorExtra: 1.5, horasMesBase: 240 },
+    { id: 'comp_lucia', empleadoId: 'emp_lucia', tipoSalario: 'POR_HORA', monto: 28, moneda: 'PEN', periodoPago: 'QUINCENAL', multiplicadorExtra: 1.25, horasMesBase: 240 },
+    { id: 'comp_marco', empleadoId: 'emp_marco', tipoSalario: 'MENSUAL', monto: 3200, moneda: 'PEN', periodoPago: 'MENSUAL', multiplicadorExtra: 1.35, horasMesBase: 240 },
   ]);
 
   const eventos: NuevoCheckInEvent[] = [
