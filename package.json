@@ -1,0 +1,29 @@
+{
+  "name": "kaypi",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=apps/web",
+    "dev:mobile": "npm run start --workspace=apps/mobile",
+    "build:web": "npm run build --workspace=apps/web",
+    "db:push": "drizzle-kit push --config=packages/db/drizzle.config.ts",
+    "db:studio": "drizzle-kit studio --config=packages/db/drizzle.config.ts",
+    "db:seed": "tsx packages/db/src/seed.ts",
+    "test": "vitest run",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "drizzle-kit": "^0.31.0",
+    "tsx": "^4.22.0",
+    "typescript": "^5",
+    "vitest": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

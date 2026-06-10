@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+/* Escanear los componentes del design system (viven fuera de apps/web). */
+@source "../../../packages/ui/src";
+
+/* Tokens "Presencia serena" (oklch) — paleta, radios, tipografía. */
+@import "../../../packages/ui/src/theme.css";
+
+/* Conectar la tipografía Geist (next/font) con los tokens del tema. */
+:root {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}

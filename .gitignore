@@ -1,0 +1,12 @@
+node_modules
+.next
+.expo
+dist
+.env
+.env.local
+.env*.local
+*.db
+*.db-shm
+*.db-wal
+.turbo
+.DS_Store

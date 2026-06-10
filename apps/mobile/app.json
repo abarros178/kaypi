@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Kaypi",
+    "slug": "kaypi",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "kaypi",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": { "supportsTablet": true },
+    "android": {},
+    "web": { "bundler": "metro" }
+  }
+}

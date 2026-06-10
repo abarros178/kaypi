@@ -1,0 +1,96 @@
+/* Kaypi · tema "Presencia serena" — tokens oklch para Tailwind v4.
+   Se importa desde apps/web DESPUÉS de `@import "tailwindcss"`.
+   Espejo JS de estos valores: ./tokens.ts (para móvil). */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --background: oklch(0.99 0.002 250);
+  --foreground: oklch(0.21 0.012 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.21 0.012 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.21 0.012 250);
+  --primary: oklch(0.70 0.13 165);
+  --primary-foreground: oklch(0.99 0.01 165);
+  --secondary: oklch(0.96 0.005 250);
+  --secondary-foreground: oklch(0.30 0.012 250);
+  --muted: oklch(0.96 0.005 250);
+  --muted-foreground: oklch(0.52 0.012 250);
+  --accent: oklch(0.95 0.025 165);
+  --accent-foreground: oklch(0.28 0.06 165);
+  --border: oklch(0.92 0.004 250);
+  --input: oklch(0.92 0.004 250);
+  --ring: oklch(0.70 0.13 165);
+  --success: oklch(0.72 0.15 150);
+  --success-foreground: oklch(0.99 0.01 150);
+  --warning: oklch(0.80 0.15 80);
+  --warning-foreground: oklch(0.27 0.05 80);
+  --destructive: oklch(0.58 0.20 25);
+  --destructive-foreground: oklch(0.99 0.01 25);
+}
+
+.dark {
+  --background: oklch(0.18 0.01 250);
+  --foreground: oklch(0.95 0.005 250);
+  --card: oklch(0.21 0.012 250);
+  --card-foreground: oklch(0.95 0.005 250);
+  --popover: oklch(0.21 0.012 250);
+  --popover-foreground: oklch(0.95 0.005 250);
+  --primary: oklch(0.72 0.13 165);
+  --primary-foreground: oklch(0.16 0.02 165);
+  --secondary: oklch(0.27 0.012 250);
+  --secondary-foreground: oklch(0.95 0.005 250);
+  --muted: oklch(0.27 0.012 250);
+  --muted-foreground: oklch(0.70 0.012 250);
+  --accent: oklch(0.30 0.04 165);
+  --accent-foreground: oklch(0.92 0.04 165);
+  --border: oklch(0.30 0.01 250);
+  --input: oklch(0.32 0.01 250);
+  --ring: oklch(0.72 0.13 165);
+  --success: oklch(0.70 0.15 150);
+  --success-foreground: oklch(0.16 0.02 150);
+  --warning: oklch(0.80 0.15 80);
+  --warning-foreground: oklch(0.20 0.04 80);
+  --destructive: oklch(0.62 0.20 25);
+  --destructive-foreground: oklch(0.99 0.01 25);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
