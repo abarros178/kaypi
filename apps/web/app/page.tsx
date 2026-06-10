@@ -28,7 +28,7 @@ const AREAS = [
     Icon: MonitorSmartphone,
   },
   {
-    href: '/reportes',
+    href: '/admin/reportes',
     titulo: 'Reportes',
     responsable: 'Andrés',
     desc: 'Dashboard (lista + calendario), métricas y PDF mensual.',

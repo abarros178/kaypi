@@ -13,7 +13,7 @@ export default async function AdminHome() {
   const metrics = [
     { label: 'Oficinas', value: nOficinas, Icon: Building2, href: '/admin/oficinas' },
     { label: 'Empleados', value: nEmpleados, Icon: Users, href: '/admin/empleados' },
-    { label: 'Marcajes', value: nEventos, Icon: ClipboardCheck, href: '/reportes' },
+    { label: 'Marcajes', value: nEventos, Icon: ClipboardCheck, href: '/admin/reportes' },
   ];
 
   return (
