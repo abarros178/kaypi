@@ -60,6 +60,8 @@ export const empleado = sqliteTable('empleado', {
   rol: text('rol', { enum: ['ADMIN', 'MANAGER', 'EMPLEADO'] }).notNull().default('EMPLEADO'),
   /** Foto de perfil opcional como referencia visual (no es plantilla biométrica). */
   fotoRefPerfil: text('foto_ref_perfil'),
+  /** Secreto HMAC-SHA256 (32 bytes base64) usado por el celular para firmar el QR del kiosco. */
+  qrSecret: text('qr_secret').notNull(),
 });
 
 export const checkInEvent = sqliteTable('checkin_event', {
@@ -87,6 +89,23 @@ export const checkInEvent = sqliteTable('checkin_event', {
     .default('NORMAL'),
   creadoPor: text('creado_por'),
   creadoEn: text('creado_en').notNull().$defaultFn(() => new Date().toISOString()),
+});
+
+/** Kiosco físico: identidad y oficina a la que pertenece. */
+export const kiosco = sqliteTable('kiosco', {
+  id: text('id').primaryKey(),
+  oficinaId: text('oficina_id').notNull().references(() => oficina.id),
+  nombre: text('nombre').notNull(),
+  status: text('status', { enum: ['active', 'inactive'] }).notNull().default('active'),
+  createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+});
+
+/** Anti-replay del QR del empleado: cada nonce válido por 60 s. */
+export const kioscoQrReplay = sqliteTable('kiosco_qr_replay', {
+  nonce: text('nonce').primaryKey(),
+  kioscoId: text('kiosco_id').notNull().references(() => kiosco.id),
+  empleadoId: text('empleado_id').notNull().references(() => empleado.id),
+  seenAt: integer('seen_at').notNull(),
 });
 
 export const codigoFallback = sqliteTable('codigo_fallback', {
@@ -142,6 +161,16 @@ export const checkInEventRelations = relations(checkInEvent, ({ one }) => ({
   oficina: one(oficina, { fields: [checkInEvent.oficinaId], references: [oficina.id] }),
 }));
 
+export const kioscoRelations = relations(kiosco, ({ one, many }) => ({
+  oficina: one(oficina, { fields: [kiosco.oficinaId], references: [oficina.id] }),
+  replays: many(kioscoQrReplay),
+}));
+
+export const kioscoQrReplayRelations = relations(kioscoQrReplay, ({ one }) => ({
+  kiosco: one(kiosco, { fields: [kioscoQrReplay.kioscoId], references: [kiosco.id] }),
+  empleado: one(empleado, { fields: [kioscoQrReplay.empleadoId], references: [empleado.id] }),
+}));
+
 // --- Tipos inferidos (para usar en la API y los reportes) ---
 
 export type Empresa = typeof empresa.$inferSelect;
@@ -153,3 +182,6 @@ export type CheckInEventRow = typeof checkInEvent.$inferSelect;
 export type NuevoCheckInEvent = typeof checkInEvent.$inferInsert;
 export type CodigoFallback = typeof codigoFallback.$inferSelect;
 export type AuditLogRow = typeof auditLog.$inferSelect;
+export type Kiosco = typeof kiosco.$inferSelect;
+export type NuevoKiosco = typeof kiosco.$inferInsert;
+export type KioscoQrReplay = typeof kioscoQrReplay.$inferSelect;
