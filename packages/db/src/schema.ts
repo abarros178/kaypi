@@ -161,6 +161,10 @@ export const checkInEventRelations = relations(checkInEvent, ({ one }) => ({
   oficina: one(oficina, { fields: [checkInEvent.oficinaId], references: [oficina.id] }),
 }));
 
+export const politicaCheckInRelations = relations(politicaCheckIn, ({ one }) => ({
+  oficina: one(oficina, { fields: [politicaCheckIn.oficinaId], references: [oficina.id] }),
+}));
+
 export const kioscoRelations = relations(kiosco, ({ one, many }) => ({
   oficina: one(oficina, { fields: [kiosco.oficinaId], references: [oficina.id] }),
   replays: many(kioscoQrReplay),

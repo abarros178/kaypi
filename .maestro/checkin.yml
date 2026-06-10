@@ -1,0 +1,152 @@
+appId: host.exp.exponent
+---
+- openLink: exp://10.0.2.2:8084
+- extendedWaitUntil:
+    visible:
+      id: mode-screen
+    timeout: 60000
+- assertVisible:
+    id: kaypi-logo
+- assertVisible:
+    id: employee-mode-button
+- assertVisible:
+    id: shared-site-mode-button
+- assertVisible:
+    id: refresh-day-button
+- tapOn:
+    id: employee-mode-button
+- extendedWaitUntil:
+    visible:
+      id: checkin-screen
+    timeout: 10000
+- assertVisible:
+    id: checkin-greeting
+- assertVisible:
+    id: checkin-button
+- tapOn:
+    id: checkin-button
+- extendedWaitUntil:
+    visible:
+      id: work-clock
+    timeout: 30000
+- assertVisible:
+    id: bottom-actions
+- assertVisible:
+    id: checkout-button
+- assertVisible:
+    id: break-button
+- tapOn:
+    id: break-button
+- extendedWaitUntil:
+    visible: On break
+    timeout: 30000
+- assertVisible: End break
+- tapOn:
+    id: checkout-button
+- extendedWaitUntil:
+    visible:
+      id: checkin-button
+    timeout: 30000
+- openLink: exp://10.0.2.2:8084
+- extendedWaitUntil:
+    visible:
+      id: mode-screen
+    timeout: 60000
+- tapOn:
+    id: shared-site-mode-button
+- extendedWaitUntil:
+    visible:
+      id: admin-login-screen
+    timeout: 10000
+- assertVisible:
+    id: admin-code-panel
+- assertVisible:
+    id: admin-code-input
+- assertVisible:
+    id: admin-login-button
+- tapOn:
+    id: admin-code-input
+- inputText: "0000"
+- tapOn:
+    id: admin-login-button
+- extendedWaitUntil:
+    visible:
+      id: shared-code-screen
+    timeout: 10000
+- assertVisible:
+    id: employee-code-panel
+- assertVisible:
+    id: employee-code-input
+- assertVisible:
+    id: code-login-button
+- tapOn:
+    id: employee-code-input
+- inputText: "emp_diego"
+- tapOn:
+    id: code-login-button
+- extendedWaitUntil:
+    visible:
+      id: checkin-screen
+    timeout: 10000
+- assertVisible:
+    id: checkin-greeting
+- assertVisible:
+    id: shared-recognition-panel
+- assertVisible:
+    id: recognized-employee
+- assertVisible:
+    id: recognized-policy
+- assertVisible: Pending check-in
+- assertVisible:
+    id: checkin-button
+- tapOn:
+    id: checkin-button
+- extendedWaitUntil:
+    visible:
+      id: shared-code-screen
+    timeout: 30000
+- assertVisible:
+    id: shared-punch-confirmation
+- tapOn:
+    id: employee-code-input
+- inputText: "emp_diego"
+- tapOn:
+    id: code-login-button
+- extendedWaitUntil:
+    visible:
+      id: shared-action-panel
+    timeout: 10000
+- assertVisible:
+    id: shared-recognition-panel
+- assertVisible: Working
+- assertVisible:
+    id: checkout-button
+- assertVisible:
+    id: break-button
+- assertNotVisible:
+    id: work-clock
+- tapOn:
+    id: break-button
+- extendedWaitUntil:
+    visible:
+      id: shared-code-screen
+    timeout: 30000
+- tapOn:
+    id: employee-code-input
+- inputText: "emp_diego"
+- tapOn:
+    id: code-login-button
+- extendedWaitUntil:
+    visible: On break
+    timeout: 10000
+- assertVisible: End break
+- assertVisible:
+    id: checkout-button
+- tapOn:
+    id: checkout-button
+- extendedWaitUntil:
+    visible:
+      id: shared-code-screen
+    timeout: 30000
+- assertVisible:
+    id: employee-code-input

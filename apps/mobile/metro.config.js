@@ -14,6 +14,14 @@ config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, 'node_modules'),
   path.resolve(workspaceRoot, 'node_modules'),
 ];
+config.resolver.disableHierarchicalLookup = true;
+config.resolver.extraNodeModules = {
+  ...config.resolver.extraNodeModules,
+  react: path.resolve(projectRoot, 'node_modules/react'),
+  'react/jsx-runtime': path.resolve(projectRoot, 'node_modules/react/jsx-runtime.js'),
+  'react/jsx-dev-runtime': path.resolve(projectRoot, 'node_modules/react/jsx-dev-runtime.js'),
+  'react-native': path.resolve(workspaceRoot, 'node_modules/react-native'),
+};
 
 module.exports = withNativeWind(config, {
   input: path.resolve(projectRoot, 'global.css'),
