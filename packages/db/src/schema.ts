@@ -142,6 +142,10 @@ export const checkInEventRelations = relations(checkInEvent, ({ one }) => ({
   oficina: one(oficina, { fields: [checkInEvent.oficinaId], references: [oficina.id] }),
 }));
 
+export const politicaCheckInRelations = relations(politicaCheckIn, ({ one }) => ({
+  oficina: one(oficina, { fields: [politicaCheckIn.oficinaId], references: [oficina.id] }),
+}));
+
 // --- Tipos inferidos (para usar en la API y los reportes) ---
 
 export type Empresa = typeof empresa.$inferSelect;
