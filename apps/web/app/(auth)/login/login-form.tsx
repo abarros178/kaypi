@@ -14,7 +14,7 @@ export function LoginForm({ next }: { next?: string }) {
     <main className="grid min-h-dvh place-items-center px-6">
       <Card className="w-full max-w-sm">
         <CardHeader className="items-center gap-3 text-center">
-          <KaypiMark className="text-lg" />
+          <KaypiMark className="h-9 w-auto" />
           <CardTitle>Inicia sesión</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
