@@ -40,7 +40,7 @@ export default function Home() {
   return (
     <main className="mx-auto flex min-h-dvh max-w-4xl flex-col gap-12 px-6 py-16">
       <header className="flex items-center justify-between">
-        <KaypiMark className="text-lg" />
+        <KaypiMark className="h-8 w-auto" />
         <Link href="/diseno" className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}>
           <Palette /> Sistema de diseño
         </Link>
