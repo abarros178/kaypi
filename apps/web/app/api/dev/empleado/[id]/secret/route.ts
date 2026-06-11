@@ -6,17 +6,14 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 /**
- * Endpoint dev: devuelve el `qrSecret` + perfil mínimo del empleado para que la
+ * Endpoint demo: devuelve el `qrSecret` + perfil mínimo del empleado para que la
  * página /kiosco/qr pueda firmar el QR rotativo en el cliente con Web Crypto.
  *
- * MODO DEMO — el secreto del empleado vive normalmente solo en su dispositivo
- * (cacheado tras login). En producción este endpoint NO existe.
+ * PoC — el secreto del empleado viviría normalmente solo en su dispositivo tras
+ * login. Aquí lo exponemos a propósito para que la vitrina funcione en cualquier
+ * entorno (dev local y Vercel).
  */
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
-  if (process.env.NODE_ENV === 'production') {
-    return new NextResponse('Not Found', { status: 404 });
-  }
-
   const { id } = await params;
   const emp = await db.query.empleado.findFirst({ where: eq(empleado.id, id) });
   if (!emp) {
